@@ -17,4 +17,3 @@ type Authenticator interface {
 	// GetAuthFile Gets Authentication File Path for OCI Registry
 	GetAuthFile() (string, error)
 }
-
