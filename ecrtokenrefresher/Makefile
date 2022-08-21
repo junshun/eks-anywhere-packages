@@ -32,5 +32,8 @@ build-linux:
 	[ -d bin ] || mkdir bin
 	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(MAKE) build
 
+docker-build: build-linux
+	docker build -t ecrtokenrefresher:latest .
+
 run:
 	$(GO) run .

@@ -2,7 +2,7 @@
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /
-COPY bin/package-manager .
+COPY bin/ecr-token-refresh .
 USER 65532:65532
 
-ENTRYPOINT ["/package-manager"]
+ENTRYPOINT ["/ecr-token-refresh"]

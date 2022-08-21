@@ -98,7 +98,10 @@ build: generate vet ## Build package-manager binary.
 run: manifests generate vet ## Run a controller from your host.
 	$(GO) run ./main.go --zap-log-level 9
 
-docker-build: test ## Build docker image with the package-manager.
+build-linux: generate vet
+	GOPROXY=direct CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -a -o manager main.go
+
+docker-build: build-linux ## Build docker image with the package-manager.
 	docker build -t ${IMG} .
 
 docker-push: ## Push docker image with the package-manager.
