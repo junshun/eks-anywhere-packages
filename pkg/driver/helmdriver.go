@@ -44,6 +44,10 @@ func NewHelm(log logr.Logger, secretAuth auth.Authenticator, tcc auth.TargetClus
 }
 
 func (d *helmDriver) Initialize(ctx context.Context, clusterName string) (err error) {
+	err = d.secretAuth.Initialize(clusterName)
+	if err != nil {
+		d.log.Info("failed to change target cluster for secrets")
+	}
 	authorizationFileName := d.secretAuth.AuthFilename()
 	client, err := registry.NewClient(registry.ClientOptCredentialsFile(authorizationFileName))
 	if err != nil {
