@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+build:
+  artifacts:
+    - image: public.ecr.aws/v7z3c3p2/controller
+      context: .
+    - image: public.ecr.aws/v7z3c3p2/ecr-token-refresh
+      context: ecrtokenrefresher/
+deploy:
+  helm:
+    releases:
+      - name: eksa-controller
+        recreatePods: false
+        skipBuildDependencies: false
+        useHelmSecrets: false
+        wait: false
+        chartPath: charts/eks-anywhere-packages
+        artifactOverrides:
+          controller: public.ecr.aws/v7z3c3p2/controller
+          cronjob: public.ecr.aws/v7z3c3p2/ecr-token-refresh
+        imageStrategy:
+          #helm: {}
+          helm:
+            explicitRegistry: true
+        setValues:
+          clusterName: m-steven-ubuntu
+          sourceRegistry: "public.ecr.aws"
+          podSecurityContext:
+            runAsNonRoot: false
