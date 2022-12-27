@@ -1,6 +1,8 @@
 apiVersion: skaffold/v2beta29
 kind: Config
 build:
+  tagPolicy:
+    sha256: { }
   artifacts:
     - image: public.ecr.aws/v7z3c3p2/controller
       context: .
@@ -15,15 +17,16 @@ deploy:
         useHelmSecrets: false
         wait: false
         chartPath: charts/eks-anywhere-packages
-        artifactOverrides:
-          controller: public.ecr.aws/v7z3c3p2/controller
-          cronjob: public.ecr.aws/v7z3c3p2/ecr-token-refresh
         imageStrategy:
           #helm: {}
           helm:
             explicitRegistry: true
         setValues:
-          clusterName: m-steven-ubuntu
-          sourceRegistry: "public.ecr.aws"
+          clusterName: "dev-cluster"
+          sourceRegistry: "public.ecr.aws/v7z3c3p2"
+          cronjob.tag: "latest"
+          controller.tag: "latest"
+          controller.repository: "controller"
+          cronjob.suspend: "true"
           podSecurityContext:
             runAsNonRoot: false
